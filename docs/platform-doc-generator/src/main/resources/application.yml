@@ -1,0 +1,27 @@
+server:
+  port: 6850
+management:
+  port: ${PLATFORM_DOC_GENERATOR_ACTUATOR_PORT:7000}
+  security:
+    enabled: false
+endpoints:
+  health:
+    sensitive: false
+  shutdown:
+    enabled: true
+
+adapter: http://${ADAPTER_HOST:localhost}:${ADAPTER_PORT:6812}/adapter/rest
+ref:
+  doc:
+    url: ${REF_DOC_URL:http://localhost:6890/docs/references}
+asset:
+  url: ${ASSET_URL:https://ci.appranix.net/cms/}
+
+security:
+  oauth2:
+    client:
+      client-id: ${REF_DOC_ID:devapp}
+      client-secret: ${REF_DOC_SECRET:password}
+      access-token-uri: ${OAUTH_SERVER_PRIVATE:http://localhost:6828}/oauth/token
+    resource:
+      user-info-uri: ${OAUTH_SERVER_PRIVATE:http://localhost:6828}/user

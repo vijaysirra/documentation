@@ -1,0 +1,13 @@
+{
+  "title": "Appranix User Documentation",
+  "description": "This is such a great book!",
+  "styles": {
+        "website": "styles/website.css"
+      },
+      "plugins": [
+        "custom-favicon"
+    ],
+    "pluginsConfig" : {
+        "favicon": "images/favicon.ico"
+    }
+}

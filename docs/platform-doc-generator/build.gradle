@@ -1,0 +1,71 @@
+buildscript {
+	ext {
+		springBootVersion = '1.5.4.RELEASE'
+	}
+	repositories {
+        maven {
+          url "http://repos.appranix.net/repository/maven-central/"
+        }
+	}
+	dependencies {
+	classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath('io.spring.gradle:dependency-management-plugin:0.5.6.RELEASE')
+        classpath 'se.transmode.gradle:gradle-docker:1.2'
+	}
+}
+
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'application'
+apply plugin: 'docker'
+apply plugin: 'jacoco'
+
+def registry = "$project.registry"
+
+sourceCompatibility = 1.8
+
+mainClassName = 'com.appranix.platform.PlatformApplication'
+
+docker {
+    baseImage = 'gcr.io/ax-lib-cr/library/java:openjdk-8u131-jre-alpine-with-appranix-ca'
+}
+
+distDocker {
+	tag = "$registry/$project.group/$applicationName"
+    exposePort 6850
+
+}
+
+task publishDocker(type: Exec, dependsOn: distDocker) {
+    commandLine 'docker','push', "$registry/$project.group/$project.name:$project.version"
+}
+
+repositories {
+    maven {
+      url "http://repos.appranix.net/repository/maven-central/"
+    }
+}
+
+dependencyManagement {
+    imports {
+        mavenBom('org.springframework.cloud:spring-cloud-dependencies:Brixton.RELEASE')
+    }
+}
+
+dependencies {
+	compile project(':cmsdal')
+	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
+	compile('org.springframework.security.oauth:spring-security-oauth2')
+	compile('org.springframework.boot:spring-boot-starter-web')
+	compile('org.webjars:bootstrap:3.3.7')
+	compile('com.fasterxml.jackson.core:jackson-core:2.8.8')
+	compile('org.springframework.cloud:spring-cloud-starter-sleuth')
+	compile('net.logstash.logback:logstash-logback-encoder:4.7')
+    compile('org.codehaus.janino:janino:2.7.8')
+    compile('org.slf4j:log4j-over-slf4j:1.7.22')
+
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+
+}

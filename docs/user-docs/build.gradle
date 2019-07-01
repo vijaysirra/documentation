@@ -1,0 +1,33 @@
+buildscript {
+    repositories {
+        maven {
+          url "http://repos.appranix.net/repository/maven-central/"
+        }
+    }
+    dependencies {
+        classpath 'se.transmode.gradle:gradle-docker:1.2'
+    }
+}
+
+apply plugin: 'docker'
+
+def registry = "$project.registry"
+
+docker {
+    baseImage = 'gcr.io/ax-lib-cr/library/httpd:2.4.23-alpine-v2'
+}
+
+task distTar(type: Exec) {
+    def cmd = "docker run --rm -v '${project(':docs:user-docs').projectDir}:/gitbook' billryan/gitbook /bin/sh build.sh"
+    commandLine '/bin/sh', '-c', cmd
+}
+
+task distDocker(type: Docker, dependsOn: distTar) {
+    tag = "$registry/$project.group/$applicationName"
+    runCommand('mkdir /var/www/localhost/htdocs/user-guide')
+    addFile("_book.tar.xz", "/var/www/localhost/htdocs/user-guide/")
+}
+
+task publishDocker(type: Exec, dependsOn: distDocker) {
+    commandLine 'docker','push', "$registry/$project.group/$project.name:$project.version"
+}

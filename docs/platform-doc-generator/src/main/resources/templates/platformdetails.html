@@ -1,0 +1,139 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <title>Platform Details</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link th:href="@{${basePath} + '/css/googleapi.css'}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" th:href="@{${basePath} + '/assets/bootstrap/3.3.7/css/bootstrap.min.css'}" />
+    <script th:src="@{${basePath} + '/js/jquery-3.2.1.min.js'}"></script>
+    <script th:src="@{${basePath} + '/assets/bootstrap/3.3.7/js/bootstrap.min.js'}"></script>
+    <link rel="stylesheet" th:href="@{${basePath} + '/assets/font-awesome/css/font-awesome.min.css'}" />
+    <link th:href="@{${basePath} + '/css/style.css'}" th:rel="stylesheet" />
+    <link href="/resources/favicon.ico" rel="icon" type="image/ico" sizes="16x16" />
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-default navbar_changed">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <img th:src="@{${basePath} + '/images/logo.png'}" th:alt="Appranix"></img><a class="navbar_divider" th:href="@{${basePath} + '/packs/' + ${platformAttribute.pack}}">Platforms</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3 defaultheight pad-right pad-left">
+                <div class="border-bottom">
+                    <div class="backbutton">
+                        <a th:href="@{${basePath} + '/packs/' + ${platformAttribute.pack}}"><i
+							class="fa fa-arrow-left" aria-hidden="true"></i></a>
+                    </div>
+                    <div class="icondiv text-center">
+                        <img th:src="@{${assetUrl} + 'public/' + ${platformAttribute.pack} + '/packs/' + ${platformAttribute.platformName} + '/' + ${platformAttribute.version} + '/' + ${platformAttribute.platformName} + '.png'}" th:alt="${platformAttribute.platformName}" class="platformicon" />
+                        <p class="platformname">
+                            <span th:text="${platformAttribute.platform}"></span>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-sm-12 border">
+                    <ul class="leftdiv">
+                        <li>
+                            <p class="key">Pack Version:</p> <span class="value"> <span
+								th:each="version : ${platformAttribute.versions}"> <span
+									th:if="${version.value == 'true'}"> <a
+										class="version active"
+										th:href="@{${basePath} + '/packs/' + ${platformAttribute.pack} + '/' + ${platformAttribute.platformName} + '/' + ${version.key} + '/' + ${platformAttribute.mode}}">
+											<span th:text="'Version '+${version.key}"></span>
+
+                            </a>
+                            </span> <span th:unless="${version.value == 'true'}">
+										<a class="version non-active"
+										th:href="@{${basePath} + '/packs/' + ${platformAttribute.pack} + '/' + ${platformAttribute.platformName} + '/' + ${version.key}+'/' + ${platformAttribute.mode}}">
+											<span th:text="'Version '+ ${version.key}"></span>
+
+                            </a>
+                            </span>
+                            </span>
+                            </span>
+                        </li>
+                        <li>
+                            <p class="key">Category:</p> <span class="value"><span
+								th:text="${#strings.capitalize(platformAttribute.category)}"></span></span>
+                        </li>
+                        <li>
+                            <p class="key">Supported Os:</p> <span class="value">-</span>
+                        </li>
+                        <li>
+                            <p class="key">Supported Clouds:</p> <span class="value">-</span>
+                        </li>
+                        <li>
+                            <p class="key">Single Mode:</p> <span class="value">-</span>
+                        </li>
+                        <li>
+                            <p class="key">Redundant Mode:</p> <span class="value">-</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-sm-9 defaultheight border-left bgclr border-right pad-right pad-left">
+                <div class="linkpadding border-bottom bodypadleft">
+                    <a th:href="@{${basePath} + '/packs/' + ${platformAttribute.pack}}">Platforms</a>&nbsp; / &nbsp; <a class="fontclr" href="#"><span
+						th:text="${platformAttribute.platform}"></span></a>
+                </div>
+                <div class="scroll border" id="table">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="tablepad">Component Name</th>
+                                <th>Required</th>
+                                <th>Min / Max</th>
+                                <th>Monitoring</th>
+                                <th>Flex</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <span th:each="component : ${platformAttribute.components}">
+								<tr>
+									<td class="tablepad"><a
+										th:href="@{${basePath} + '/packs/' + ${platformAttribute.pack} + '/' + ${platformAttribute.platformName} + '/' + ${platformAttribute.version} + '/' + ${platformAttribute.mode} + '/' + ${component.componentName}}">
+											<span th:text="${component.componentName}"></span>
+                            </a>
+                            </td>
+                            <td><span th:text="${component.required}"></span></td>
+                            <td><span th:text="${component.limit}"></span></td>
+                            <td><span th:text="${component.monitor}"></span></td>
+                            <td><span th:text="${#strings.capitalize(component.flex)}"></span></td>
+                            </tr>
+                            </span>
+                        </tbody>
+                    </table>
+                </div>
+
+                <dl class="bodypadleft plat_desc bodypadright border" style="display: none">
+                    <dt class="fontclr">Description</dt>
+                    <dd>
+                        <span th:text="${platformAttribute.description}"></span>
+                    </dd>
+                </dl>
+            </div>
+            <div class="col-sm-3 defaultheight pad-right pad-left bgclr border rightdiv" style="display: none">
+                <div class="border-bottom bodypadleft">
+                    <h4 class="fontclr">Featured Articles</h4>
+                </div>
+                <ul class="bodypadleft bodypadright">
+                    <li><dt>Lorem Ipsum is simply dummy text</dt>
+                        <dd>It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages.</dd> <a href="#" class="fontclr">Read more</a></li>
+                    <li><dt>Lorem Ipsum is simply dummy text</dt>
+                        <dd>It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages.</dd> <a href="#" class="fontclr">Read more</a></li>
+                    <li><dt>Lorem Ipsum is simply dummy text</dt>
+                        <dd>It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages.</dd> <a href="#" class="fontclr">Read more</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,106 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <title>Platform References</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link th:href="@{${basePath} + '/css/googleapi.css'}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" th:href="@{${basePath} + '/assets/bootstrap/3.3.7/css/bootstrap.min.css'}" />
+    <script th:src="@{${basePath} + '/js/jquery-3.2.1.min.js'}"></script>
+    <script th:src="@{${basePath} + '/assets/bootstrap/3.3.7/js/bootstrap.min.js'}"></script>
+    <link rel="stylesheet" th:href="@{${basePath} + '/assets/font-awesome/css/font-awesome.min.css'}" />
+    <link th:href="@{${basePath} + '/css/style.css'}" th:rel="stylesheet" />
+    <link href="/resources/favicon.ico" rel="icon" type="image/ico" sizes="16x16" />
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-default navbar_changed">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <img th:src="@{${basePath} + '/images/logo.png'}" th:alt="Appranix"></img> <a class="navbar_divider" href="#">Platforms</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div id="index">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-3 col-md-2 pad-right pad-left">
+                    <div class="col-sm-12">
+                        <h4>Pack Source</h4>
+                        <hr />
+                    </div>
+                    <div class="col-sm-12 pad-right">
+
+                        <ul class="pack_source nav nav-stacked">
+                            <span th:each="packs : ${pack}"> <span
+								th:if="${packs == activePack}">
+									<li class="active_link"><a
+										th:href="@{${basePath} + '/packs/'+ ${packs}}"><span
+											th:text="${#strings.capitalize(packs)}"></span></a>
+                            </li>
+                            </span> <span th:unless="${packs == activePack}">
+									<li><a th:href="@{${basePath} + '/packs/'+ ${packs}}"><span
+											th:text="${#strings.capitalize(packs)}"></span></a>
+                            </li>
+                            </span>
+                            </span>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-sm-9 col-md-10 defaultheight border-left">
+                    <span th:each="packs : ${platform}"> <span
+						th:each="categories : ${packs.value}"> <span
+							th:each="category : ${categories.key}">
+								<div class="row">
+									<div class="col-sm-12">
+				<span th:if="${!categories.value.empty}">
+										<h4>
+											<span th:text="${#strings.capitalize(category)}"></span>
+                    </h4>
+                    <hr />
+                    </span>
+
+                </div>
+            </div>
+            <div class="row">
+                <span th:each="platforms : ${categories.value}">
+										<div class="col-lg-4 col-sm-6 col-md-4">
+											<div class="platform_border1">
+												<div class="img-holder">
+													<img
+														th:src="@{${assetUrl} + 'public/' + ${platforms.pack} + '/packs/' + ${platforms.platformName} + '/' + ${platforms.version} + '/' + ${platforms.platformName} + '.png'}"
+														th:alt="${platforms.platform}" class="imgclass" th:onerror="@{'this.src=\''+ ${basePath} + '/images/no-image.png\'' }"/>
+												</div>
+												<div class="right-content">
+													<h4 class="plat-name"
+														th:title="${platforms.platform}">
+														<span th:text="${platforms.platform}"></span>
+                </h4>
+                <div class="platformdetails">
+                    <span th:each="mode : ${platforms.modes}"> <a
+															class="btn button_prop"
+															th:href="@{${basePath} + '/packs/'  +${platforms.pack} + '/' + ${platforms.platformName} + '/latest/' + ${mode}}">
+																<span th:text="${#strings.capitalize(mode)}"></span>
+                    </a>
+                    </span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    </span>
+    </div>
+    </span>
+    </span>
+    </span>
+    </div>
+
+    </div>
+    </div>
+    </div>
+</body>
+
+</html>

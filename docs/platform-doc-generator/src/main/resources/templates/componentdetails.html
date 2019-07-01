@@ -1,0 +1,197 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <title>Component Details</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link th:href="@{${basePath} + '/css/googleapi.css'}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" th:href="@{${basePath} + '/assets/bootstrap/3.3.7/css/bootstrap.min.css'}" />
+    <script th:src="@{${basePath} + '/js/jquery-3.2.1.min.js'}"></script>
+    <script th:src="@{${basePath} + '/assets/bootstrap/3.3.7/js/bootstrap.min.js'}"></script>
+    <link rel="stylesheet" th:href="@{${basePath} + '/assets/font-awesome/css/font-awesome.min.css'}" />
+    <link th:href="@{${basePath} + '/css/style.css'}" th:rel="stylesheet" />
+    <link href="/resources/favicon.ico" rel="icon" type="image/ico" sizes="16x16" />
+</head>
+
+<body>
+    <script>
+        $(document).ready(function() {
+            $('#overview').addClass("tab-active");
+            $('#dependent-component-content').hide();
+
+            $('#overview').click(function() {
+                $('#overview-content').show();
+                $(this).addClass("tab-active");
+                $('#dependent-component').removeClass("tab-active");
+                $('#dependent-component-content').hide();
+            });
+            $('#dependent-component').click(function() {
+                $('#overview-content').hide();
+                $(this).addClass("tab-active");
+                $("#overview").removeClass("tab-active");
+                $('#dependent-component-content').show();
+            });
+        });
+    </script>
+
+    <header>
+        <nav class="navbar navbar-default navbar_changed">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <img th:src="@{${basePath} + '/images/logo.png'}" th:alt="Appranix"></img> <a class="navbar_divider" th:href="@{${basePath} + '/packs/' + ${platformAttribute.pack}}">Platforms</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3 defaultheight pad-right pad-left">
+                <div class="border-bottom">
+                    <div class="backbutton">
+                        <a th:href="@{${basePath} + '/packs/' + ${platformAttribute.pack} + '/' + ${platformAttribute.platformName} + '/' + ${platformAttribute.version} + '/' + ${platformAttribute.mode}}"><i
+							class="fa fa-arrow-left" aria-hidden=" true"></i></a>
+                    </div>
+                    <div class="icondiv text-center">
+                        <img th:src="@{${assetUrl} + 'public/' + ${platformAttribute.pack} + '/packs/' + ${platformAttribute.platformName} + '/' + ${platformAttribute.version} + '/' + ${platformAttribute.platformName} + '.png'}" th:alt="${platformAttribute.platformName}" class="platformicon" />
+                        <p class="platformname">
+                            <span th:text="${platformAttribute.platform}" />
+                        </p>
+                    </div>
+                </div>
+                <div class="col-sm-12 border">
+                    <ul class="leftdiv">
+                        <li>
+                            <p class="key">Pack Version:</p> <span class="value"> <span
+								th:each="version : ${platformAttribute.versions}"> <span
+									th:if="${version.value == 'true'}"> <a
+										class="version active"
+										th:href="@{${basePath} + '/packs/' + ${platformAttribute.pack} + '/' + ${platformAttribute.platformName} + '/' + ${version.key} + '/' + ${platformAttribute.mode}}">
+											<span th:text="'Version '+${version.key}"></span>
+
+                            </a>
+                            </span> <span th:unless="${version.value == 'true'}">
+										<a class="version non-active"
+										th:href="@{${basePath} + '/packs/' + ${platformAttribute.pack} + '/' + ${platformAttribute.platformName} + '/' + ${version.key}+'/' + ${platformAttribute.mode}}">
+											<span th:text="'Version '+ ${version.key}"></span>
+
+                            </a>
+                            </span>
+                            </span>
+                            </span>
+                        </li>
+                        <li>
+                            <p class="key">Category:</p> <span class="value"><span
+								th:text="${#strings.capitalize(platformAttribute.category)}"></span></span>
+                        </li>
+                        <li>
+                            <p class="key">Supported Os:</p> <span class="value">-</span>
+                        </li>
+                        <li>
+                            <p class="key">Supported Clouds:</p> <span class="value">-</span>
+                        </li>
+                        <li>
+                            <p class="key">Single Mode:</p> <span class="value">-</span>
+                        </li>
+                        <li>
+                            <p class="key">Redundant Mode:</p> <span class="value">-</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-sm-9 defaultheight border-left bgclr border-right pad-right pad-left">
+                <div class="linkpadding border-bottom bodypadleft">
+                    <a th:href="@{${basePath} + '/packs/' + ${platformAttribute.pack}}">Platforms</a>&nbsp; / &nbsp;
+                    <a th:href="@{${basePath} + '/packs/' + ${platformAttribute.pack} + '/' + ${platformAttribute.platformName} + '/' + ${platformAttribute.version} + '/' + ${platformAttribute.mode}}"><span
+						th:text="${platformAttribute.platform}"></span></a>&nbsp; / &nbsp;
+                    <a class="fontclr" href="#"><span
+						th:text="${platformAttribute.component.componentName}"></span></a>
+                </div>
+
+                <div class="tab bodypadleft">
+                    <input type="button" name="overview" value="Overview" id="overview" class="btn" />
+                    <span th:if="${!platformAttribute.component.dependentComponent.empty}">
+          			<input type="button" name="dependent-component" value="Dependent Components" id="dependent-component" class="btn"/>
+          			</span>
+                </div>
+
+                <div class="" id="overview-content">
+                    <dl class="scroll bodypadleft bodypadright border">
+                        <span th:each="componentAttribute : ${platformAttribute.component.attributes}">
+							<span th:each="componentValue : ${componentAttribute.value}">
+						<div class="definition-pad-bottom">
+								<dt>
+									<span
+										th:text="${componentAttribute.key}"></span>
+                        </dt>
+                        <dd>
+                            <span th:if="${componentValue.value != ''}">
+                        <p th:text="${componentValue.value}"></p>
+                        </span>
+                            <span th:if="${componentValue.key != null}">
+                        <p style="font-weight:300">Default Value:
+                        <span th:text="${componentValue.key}"></span></p>
+                            </span>
+                        </dd>
+                </div>
+                </span>
+
+                </span>
+                <span th:if="${!platformAttribute.component.monitoringComponent.empty}">
+						<dt>Monitoring component</dt>
+					</span>
+                <span th:each="monitoringAttribute : ${platformAttribute.component.monitoringComponent}">
+						<dd>
+							<span th:text="${monitoringAttribute}"></span>
+                </dd>
+                </span>
+                </dl>
+
+            </div>
+            <div class="" id="dependent-component-content">
+                <span th:if="${!platformAttribute.component.dependentComponent.empty}">
+
+					<div class="border" id="table">
+						<table class="table">
+							<thead>
+								<th class="tablepad">Component Name</th>
+								<th>Min / Max</th>
+							</thead>
+							<tbody>
+								<span
+									th:each="dependent :${platformAttribute.component.dependentComponent}">
+									<tr>
+										<td class="tablepad"><a
+											th:href="@{${basePath} + '/packs/' + ${platformAttribute.pack} + '/' + ${platformAttribute.platformName} + '/' + ${platformAttribute.version} + '/' + ${platformAttribute.mode} + '/' + ${dependent.key}}">
+												<span th:text="${dependent.key}"></span>
+                </a>
+                </td>
+                <td><span th:text="${dependent.value}"></span></td>
+                </tr>
+                </span>
+
+                </tbody>
+                </table>
+            </div>
+            </span>
+        </div>
+
+    </div>
+    <div class="col-sm-3 defaultheight pad-right pad-left bgclr border rightdiv" style="display: none">
+        <div class="border-bottom bodypadleft">
+            <h4 class="fontclr">Featured Articles</h4>
+        </div>
+        <ul class="bodypadleft bodypadright">
+            <li><dt>Lorem Ipsum is simply dummy text</dt>
+                <dd>It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages.</dd> <a href="#" class="fontclr">Read more</a></li>
+            <li><dt>Lorem Ipsum is simply dummy text</dt>
+                <dd>It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages.</dd> <a href="#" class="fontclr">Read more</a></li>
+            <li><dt>Lorem Ipsum is simply dummy text</dt>
+                <dd>It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages.</dd> <a href="#" class="fontclr">Read more</a></li>
+        </ul>
+    </div>
+    </div>
+    </div>
+</body>
+
+</html>
